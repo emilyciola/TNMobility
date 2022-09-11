@@ -1,0 +1,62 @@
+version: "3.0"
+- story: form_singolo
+  steps:
+  - intent: buongiorno
+  - action: utter_bungiorno
+  - intent: viaggio
+  - action: bus_form
+  - slot_was_set:
+    - requested_slot: input_partenza
+  - slot_was_set:
+    - input_partenza: Piazza di povo
+  - slot_was_set:
+    - requested_slot: input_arrivo
+  - slot_was_set:
+    - input_arrivo: Sopramonte M. Petoci
+  - slot_was_set:
+    - requested_slot: time
+  - slot_was_set:
+    - time: alle 4
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit
+  - action: utter_valori_slot
+  - action: action_stop_api
+  - intent: arrivederci
+  - action: utter_arrivederci
+
+- story: form_doppio
+  steps:
+  - intent: bungiorno
+  - action: utter_buongiorno
+  - intent: viaggio
+    entities:
+    - input_partenza: Sopramonte Campra
+    - input_arrivo: Sopramonte Bivio Baselga    
+  - action: bus_form
+  - action: action_extract_slots
+  - slot_was_set:
+    - requested_slot: input_partenza
+  - slot_was_set:
+    - requested_slot: input_arrivo
+  - action: action_extract_slots
+  - slot_was_set:
+    - input_partenza: Sopramonte Campra
+    - input_arrivo: Sopramonte Bivio Baselga
+  - intent: time
+    entities:
+    - time: '2022-05-13T16:40:00.000-07:00'
+  - slot_was_set:
+    - time: '2022-05-13T16:40:00.000-07:00'
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit
+  - action: utter_valori_slot
+  - action: action_stop_api
+  - intent: arrivederci
+  - action: utter_arrivederci
+
+
+

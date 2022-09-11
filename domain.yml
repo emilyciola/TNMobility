@@ -1,0 +1,95 @@
+version: '3.0'
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+intents:
+- buongiorno
+- arrivederci
+- tipologia_chatbot
+- pianificazione_itinerario
+- viaggio
+- time
+- conferma
+- negazione
+- valori_slot
+- resetta
+- risposta_breve
+- inizia
+entities:
+- input_arrivo
+- input_partenza
+- time
+slots:
+  input_partenza:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: input_partenza
+  input_arrivo:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: input_arrivo
+  time:
+    type: any
+    influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: time
+responses:
+  utter_submit:
+  - text: Confermato! La fermata di partenza e arrivo sono state inserite! Un attimo che cerco il percorso...
+  utter_slots_values_server:
+  - text: La fermata di partenza è {input_partenza} e quella di arrivo è {input_arrivo} e l'ora è {time}.
+  utter_please_rephrase:
+  - text: Mi dispiace non ho capito... puoi ripetere?
+  utter_buongiorno:
+  - text: Ciao! Posso darti informazioni sui trasporti pubblici in Trentino. 
+  utter_arrivederci:
+  - text: Arrivederci!
+  - text: Grazie e arrivederci!
+  utter_tipologia_chatbot:
+  - text: Sono un chatbot che gestisce la mobilità sostenibile a Trento. Puoi chiedermi di pianificare un itinerario!
+    buttons:
+    - title: Inizia
+      payload: /inizia
+  utter_input_partenza:
+  - text: Potresti dirmi la fermata di partenza e di arrivo?
+  utter_valori_slot:
+  - text: 'input_partenza è: {input_partenza}; input_arrivo: {input_arrivo}, ora: {time}'
+  utter_nuovo_itinerario:
+  - text: Vuoi cercare un altro itinerario?
+    buttons:
+    - title: Si
+      payload: /conferma
+    - title: No
+      payload: /negazione
+  utter_ringraziamenti:
+  - text: Ti ringrazio per aver utilizzato TN Mobility! Se hai bisogno di cercare altri itinerari sono a tua disposizione.
+  utter_ask_input_partenza:
+  - text: Da dove devi partire?
+  utter_ask_input_arrivo:
+  - text: Dove vuoi andare?
+  utter_ask_time:
+  - text: A che ore dovresti partire?
+actions:
+- utter_buongiorno
+- utter_arrivederci
+- action_reset_all_slots
+- utter_valori_slot
+- utter_tipologia_chatbot
+- utter_input_partenza
+- utter_slots_values_server
+- utter_submit
+- action_stop_api
+- utter_ask_time
+- utter_ask_input_partenza
+- utter_ask_input_arrivo
+forms:
+  bus_form:
+    required_slots:
+    - input_partenza
+    - input_arrivo
+    - time

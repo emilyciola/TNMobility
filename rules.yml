@@ -1,0 +1,69 @@
+version: "3.0"
+
+rules:
+- rule: Ask the user to rephrase whenever they send a message with low NLU confidence
+  steps:
+  - intent: nlu_fallback
+  - action: utter_please_rephrase
+
+- rule: Saluto iniziale
+  steps:
+  - intent: buongiorno
+  - action: utter_buongiorno
+
+- rule: Chatbot
+  steps:
+  - intent: tipologia_chatbot
+  - action: utter_tipologia_chatbot
+
+- rule: Pianificazione_itinerario
+  steps:
+  - intent: pianificazione_itinerario
+  - action: utter_input_partenza
+  
+- rule: Valori_slot
+  steps:
+  - intent: valori_slot
+  - action: utter_valori_slot
+
+- rule: ResetSlots
+  steps:
+  - intent: resetta
+  - action: action_reset_all_slots
+
+- rule: Inizia
+  steps:
+  - intent: inizia
+  - action: utter_input_partenza
+
+- rule: Si
+  steps:
+  - intent: conferma
+  - action: action_reset_all_slots
+  - action: utter_input_partenza
+
+- rule: No
+  steps:
+  - intent: negazione
+  - action: action_reset_all_slots
+  - action: utter_ringraziamenti
+  - action: utter_arrivederci
+
+- rule: Avvio_form_inizio_sessione
+  steps:
+  - intent: viaggio
+  - action: bus_form
+  - active_loop: bus_form
+
+- rule: Submit Bus Form #regola che disattiva e gestisce il form
+  #condition per fare in modo che non riconosca i giorni fuori dal contesto
+  condition:
+  - active_loop: bus_form
+  steps: #qui parte la disattivazione del form se tutti i campi sono stati compilati
+  - action: bus_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: utter_submit
+  - action: utter_valori_slot
+  - action: action_stop_api

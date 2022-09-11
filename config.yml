@@ -1,0 +1,31 @@
+recipe: default.v1
+language: "it"
+
+pipeline:
+  - name: "SpacyNLP"
+    model: "it_core_news_md"
+  - name: SpacyTokenizer
+  - name: SpacyFeaturizer
+  - name: RegexFeaturizer
+  - name: LexicalSyntacticFeaturizer
+  - name: CountVectorsFeaturizer
+  - name: CountVectorsFeaturizer
+    analyzer: char_wb
+    min_ngram: 1
+    max_ngram: 4
+  - name: DIETClassifier
+    epochs: 100
+  - name: EntitySynonymMapper
+  - name: ResponseSelector
+    epoche: 100
+  - name: "DucklingEntityExtractor"
+    url: "http://localhost:8000"
+    dimensions: ["time"]
+    locale: "it_IT"
+
+policies:
+  - name: MemoizationPolicy
+  - name: TEDPolicy
+    max_history: 5
+    epochs: 100
+  - name: RulePolicy
